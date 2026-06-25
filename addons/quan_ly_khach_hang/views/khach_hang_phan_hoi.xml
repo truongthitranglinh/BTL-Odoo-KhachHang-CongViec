@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_khach_hang_form_phan_hoi" model="ir.ui.view">
+            <field name="name">khach_hang.form.phan_hoi</field>
+            <field name="model">khach_hang</field>
+            <field name="inherit_id" ref="quan_ly_khach_hang.view_khach_hang_form"/>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <notebook>
+                        <page string="Phan hoi">
+                            <field name="phan_hoi_ids">
+                                <tree editable="bottom">
+                                    <field name="ma_phan_hoi"/>
+                                    <field name="tieu_de"/>
+                                    <field name="muc_do_hai_long"/>
+                                    <field name="noi_dung_phan_hoi"/>
+                                    <field name="ngay_phan_hoi"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -9,21 +9,21 @@
                     <sheet>
                         <div class="oe_title">
                             <h1>
-                                <field name="tieu_de" placeholder="Tiêu đề phản hồi"/>
+                                <field name="tieu_de" placeholder="Tieu de phan hoi"/>
                             </h1>
                         </div>
                         <group>
-                            <group string="Thông tin phản hồi">
+                            <group string="Thong tin phan hoi">
                                 <field name="ma_phan_hoi"/>
                                 <field name="khach_hang_id"/>
                                 <field name="nhan_vien_danh_gia_id"/>
                                 <field name="ngay_phan_hoi"/>
                             </group>
-                            <group string="Đánh giá (1-5)">
+                            <group string="Danh gia">
                                 <field name="muc_do_hai_long"/>
                             </group>
                         </group>
-                        <group string="Nội dung phản hồi">
+                        <group string="Noi dung">
                             <field name="noi_dung_phan_hoi" nolabel="1"/>
                         </group>
                     </sheet>
@@ -47,7 +47,7 @@
         </record>
 
         <record id="action_phan_hoi" model="ir.actions.act_window">
-            <field name="name">Phản hồi khách hàng</field>
+            <field name="name">Phan hoi khach hang</field>
             <field name="res_model">phan_hoi</field>
             <field name="view_mode">tree,form</field>
         </record>
