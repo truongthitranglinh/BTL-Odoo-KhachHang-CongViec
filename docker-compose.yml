@@ -12,7 +12,7 @@ services:
     volumes:
        - /home/ttdn/ttdn_k15/database_ttdn/_data:/data/postgres
     ports:
-      - "5431:5432"
+      - "5433:5432"
     # networks:
     #   - postgres
     # restart: unless-stopped
