@@ -52,8 +52,6 @@ Luong du lieu: HRM -> Quan ly Khach hang -> Quan ly Cong viec
 | Cong viec hoan thanh (Bao gia dong y) | Cap nhat KH -> "Thanh cong" |
 | Cong viec hoan thanh (Goi dien/Email) | Cap nhat KH -> "Da lien he" |
 
-Xem so do Business Flow tai: docs/business-flow/
-
 ## Cai tien so voi ban goc
 
 - Them trigger tu dong tao cong viec tu phan hoi khach hang
@@ -101,12 +99,12 @@ Truy cap: http://localhost:8069
 
 ## Thanh vien nhom
 
-| Ho ten | MSSV | Vai tro |
-|---|---|---|
-| Truong Thi Trang Linh | 1771020425 | Module Quan ly Khach hang, tich hop he thong |
-| Do Thi Phuong Thao | 1771020642 | Module Quan ly Cong viec, Google Calendar |
-| Hoang Minh Quan | 1771020563 | Module HRM, Chatbot AI |
-| Dinh Anh Truc | 1771020686 | Module Quan ly Cong viec, Business Flow |
+| Ho ten | MSSV |
+|---|---|
+| Truong Thi Trang Linh | 1771020425 |
+| Do Thi Phuong Thao | 1771020642 |
+| Hoang Minh Quan | 1771020563 |
+| Dinh Anh Truc | 1771020686 |
 
 ## Nguon tham khao
 
