@@ -51,6 +51,57 @@ class KhachHang(models.Model):
             else:
                 rec.so_cong_viec = 0
 
+    def action_tao_lich_hen(self):
+        """Tạo lịch hẹn → tự động tạo công việc loại lich_hen"""
+        for rec in self:
+            nhan_vien = rec.nguoi_phu_trach_id
+            if not nhan_vien or not nhan_vien.phong_ban_id:
+                continue
+            self.env['cong_viec'].create({
+                'tieu_de': f"Lịch hẹn với {rec.ten_khach_hang}",
+                'loai_cong_viec': 'lich_hen',
+                'khach_hang_id': rec.id,
+                'phong_ban_phu_trach_id': nhan_vien.phong_ban_id.id,
+                'nguoi_thuc_hien_id': nhan_vien.id,
+                'mo_ta': f"Lịch hẹn tự động tạo cho khách hàng {rec.ten_khach_hang}",
+                'muc_do_uu_tien': 'cao',
+                'trang_thai': 'moi',
+            })
+            rec.write({'trang_thai': 'dang_dam_phan'})
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Công việc',
+            'res_model': 'cong_viec',
+            'view_mode': 'list,form',
+            'domain': [('khach_hang_id', 'in', self.ids)],
+            'context': {'default_khach_hang_id': self.id},
+        }
+
+    def action_tao_bao_gia(self):
+        """Tạo báo giá → tự động tạo công việc loại gui_bao_gia"""
+        for rec in self:
+            nhan_vien = rec.nguoi_phu_trach_id
+            if not nhan_vien or not nhan_vien.phong_ban_id:
+                continue
+            self.env['cong_viec'].create({
+                'tieu_de': f"Gửi báo giá cho {rec.ten_khach_hang}",
+                'loai_cong_viec': 'gui_bao_gia',
+                'khach_hang_id': rec.id,
+                'phong_ban_phu_trach_id': nhan_vien.phong_ban_id.id,
+                'nguoi_thuc_hien_id': nhan_vien.id,
+                'mo_ta': f"Báo giá tự động tạo cho khách hàng {rec.ten_khach_hang}",
+                'muc_do_uu_tien': 'cao',
+                'trang_thai': 'moi',
+            })
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Công việc',
+            'res_model': 'cong_viec',
+            'view_mode': 'list,form',
+            'domain': [('khach_hang_id', 'in', self.ids)],
+            'context': {'default_khach_hang_id': self.id},
+        }
+
     def action_xem_cong_viec(self):
         return {
             'type': 'ir.actions.act_window',
