@@ -1,6 +1,16 @@
 # -*- coding: utf-8 -*-
+import io
+import base64
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 import unicodedata
+
+try:
+    import openpyxl
+    from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+    HAS_OPENPYXL = True
+except ImportError:
+    HAS_OPENPYXL = False
 
 
 class KhachHang(models.Model):
@@ -100,6 +110,91 @@ class KhachHang(models.Model):
             'view_mode': 'list,form',
             'domain': [('khach_hang_id', 'in', self.ids)],
             'context': {'default_khach_hang_id': self.id},
+        }
+
+    def action_xuat_excel(self):
+        """Xuất báo cáo khách hàng ra Excel"""
+        if not HAS_OPENPYXL:
+            raise UserError("Cần cài openpyxl: pip install openpyxl")
+
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Báo cáo khách hàng"
+
+        header_fill = PatternFill("solid", fgColor="6C3483")
+        header_font = Font(bold=True, color="FFFFFF", size=11)
+        center = Alignment(horizontal="center", vertical="center")
+        thin = Border(
+            left=Side(style="thin"), right=Side(style="thin"),
+            top=Side(style="thin"), bottom=Side(style="thin")
+        )
+
+        headers = ["Mã KH", "Tên khách hàng", "Loại KH", "Số điện thoại",
+                   "Email", "Trạng thái", "Người phụ trách", "Số công việc", "Ghi chú"]
+        col_widths = [12, 25, 15, 15, 25, 18, 20, 12, 30]
+
+        for col, (h, w) in enumerate(zip(headers, col_widths), 1):
+            cell = ws.cell(row=1, column=col, value=h)
+            cell.fill = header_fill
+            cell.font = header_font
+            cell.alignment = center
+            cell.border = thin
+            ws.column_dimensions[openpyxl.utils.get_column_letter(col)].width = w
+
+        ws.row_dimensions[1].height = 25
+
+        trang_thai_map = {
+            "tiem_nang": "Tiềm năng", "da_lien_he": "Đã liên hệ",
+            "dang_dam_phan": "Đang đàm phán", "thanh_cong": "Thành công", "that_bai": "Thất bại",
+        }
+        loai_map = {"ca_nhan": "Cá nhân", "doanh_nghiep": "Doanh nghiệp"}
+        color_map = {
+            "tiem_nang": "D7BDE2", "da_lien_he": "AED6F1",
+            "dang_dam_phan": "FAD7A0", "thanh_cong": "A9DFBF", "that_bai": "F1948A",
+        }
+
+        records = self.search([]) if not self.ids else self
+
+        for row, rec in enumerate(records, 2):
+            row_data = [
+                rec.ma_khach_hang or "",
+                rec.ten_khach_hang or "",
+                loai_map.get(rec.loai_khach_hang, ""),
+                rec.so_dien_thoai or "",
+                rec.email or "",
+                trang_thai_map.get(rec.trang_thai, ""),
+                rec.nguoi_phu_trach_id.ho_ten_day_du if rec.nguoi_phu_trach_id else "",
+                rec.so_cong_viec,
+                rec.ghi_chu or "",
+            ]
+            fill_color = color_map.get(rec.trang_thai, "FFFFFF")
+            row_fill = PatternFill("solid", fgColor=fill_color)
+
+            for col, val in enumerate(row_data, 1):
+                cell = ws.cell(row=row, column=col, value=val)
+                cell.border = thin
+                cell.alignment = Alignment(vertical="center")
+                if col == 6:
+                    cell.fill = row_fill
+
+        ws.freeze_panes = "A2"
+
+        output = io.BytesIO()
+        wb.save(output)
+        output.seek(0)
+        file_data = base64.b64encode(output.read())
+
+        attachment = self.env["ir.attachment"].create({
+            "name": "BaoCao_KhachHang.xlsx",
+            "type": "binary",
+            "datas": file_data,
+            "mimetype": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        })
+
+        return {
+            "type": "ir.actions.act_url",
+            "url": f"/web/content/{attachment.id}?download=true",
+            "target": "self",
         }
 
     def action_xem_cong_viec(self):
