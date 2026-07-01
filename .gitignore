@@ -52,3 +52,8 @@ package.json
 /venv/
 /venv_15_01/
 .env
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.zip
