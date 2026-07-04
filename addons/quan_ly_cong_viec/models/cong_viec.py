@@ -25,7 +25,6 @@ class CongViec(models.Model):
     ], string="Loại công việc", required=True, default='goi_dien')
     
     khach_hang_id = fields.Many2one('khach_hang', string="Khách hàng", required=True)
-    du_an_id = fields.Many2one('du_an', string="Dự án")
     
     ngay_bat_dau = fields.Datetime("Ngày bắt đầu", default=fields.Datetime.now)
     ngay_hoan_thanh = fields.Datetime("Ngày hoàn thành")
@@ -46,7 +45,7 @@ class CongViec(models.Model):
     ], string="Mức độ ưu tiên", default='trung_binh')
     
     phong_ban_phu_trach_id = fields.Many2one('phong_ban', string="Phòng ban phụ trách", required=True)
-    nguoi_thuc_hien_id = fields.Many2one('nhan_vien', string="Nhân viên được gán", readonly=True)
+    nguoi_thuc_hien_id = fields.Many2one('nhan_vien', string="Nhân viên được gán")
     
     mo_ta = fields.Text("Mô tả")
     ket_qua = fields.Text("Kết quả")

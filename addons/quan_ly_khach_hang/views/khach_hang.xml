@@ -7,12 +7,6 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <button name="action_xem_cong_viec" type="object"
-                                class="oe_stat_button" icon="fa-tasks">
-                                <field name="so_cong_viec" widget="statinfo" string="Công việc"/>
-                            </button>
-                        </div>
                         <header>
                             <button name="action_tao_lich_hen" type="object"
                                 string="Tạo lịch hẹn" class="btn-primary"/>

@@ -21,7 +21,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/cong_viec.xml',
-        'views/du_an_tai_nguyen_khieu_nai.xml',
+        'views/xu_ly_khieu_nai.xml',
         'views/khach_hang_extend.xml',
         'views/nhan_vien_extend.xml',
         'views/menu.xml',

@@ -30,7 +30,7 @@
                                 <field name="loai_cong_viec"/>
                                 <field name="khach_hang_id"/>
                                 <field name="phong_ban_phu_trach_id"/>
-                                <field name="nguoi_thuc_hien_id" readonly="1"/>
+                                <field name="nguoi_thuc_hien_id"/>
                                 <field name="muc_do_uu_tien"/>
                             </group>
                             <group string="Thời gian">

@@ -5,31 +5,17 @@
             id="menu_root"
             name="Quản lý công việc"
             sequence="11"/>
-          
-        <menuitem name="Công việc" 
-            id="menu_cong_viec" 
-            parent="menu_root" 
+
+        <menuitem name="Công việc"
+            id="menu_cong_viec"
+            parent="menu_root"
             sequence="1"
             action="action_cong_viec"
         />
 
-        <menuitem name="Dự án" 
-            id="menu_du_an" 
-            parent="menu_root" 
-            sequence="2"
-            action="action_du_an"
-        />
-
-        <menuitem name="Tài nguyên dự án" 
-            id="menu_tai_nguyen_du_an" 
-            parent="menu_root" 
-            sequence="3"
-            action="action_tai_nguyen_du_an"
-        />
-
-        <menuitem name="Xử lý khiếu nại" 
-            id="menu_xu_ly_khieu_nai" 
-            parent="menu_root" 
+        <menuitem name="Xử lý khiếu nại"
+            id="menu_xu_ly_khieu_nai"
+            parent="menu_root"
             sequence="4"
             action="action_xu_ly_khieu_nai"
         />
