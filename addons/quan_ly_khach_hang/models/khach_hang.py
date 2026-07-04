@@ -45,22 +45,6 @@ class KhachHang(models.Model):
     ghi_chu = fields.Text("Ghi chú")
     phan_hoi_ids = fields.One2many('phan_hoi', 'khach_hang_id', string='Phan hoi')
 
-    # ===== CẢI TIẾN: Thống kê công việc liên quan =====
-    so_cong_viec = fields.Integer(
-        "Số công việc",
-        compute='_compute_so_cong_viec'
-    )
-
-    def _compute_so_cong_viec(self):
-        CongViec = self.env.get('cong_viec')
-        for rec in self:
-            if CongViec is not None:
-                rec.so_cong_viec = CongViec.search_count([
-                    ('khach_hang_id', '=', rec.id)
-                ])
-            else:
-                rec.so_cong_viec = 0
-
     def action_tao_lich_hen(self):
         """Tạo lịch hẹn → tự động tạo công việc loại lich_hen"""
         for rec in self:
@@ -130,8 +114,8 @@ class KhachHang(models.Model):
         )
 
         headers = ["Mã KH", "Tên khách hàng", "Loại KH", "Số điện thoại",
-                   "Email", "Trạng thái", "Người phụ trách", "Số công việc", "Ghi chú"]
-        col_widths = [12, 25, 15, 15, 25, 18, 20, 12, 30]
+                   "Email", "Trạng thái", "Người phụ trách", "Ghi chú"]
+        col_widths = [12, 25, 15, 15, 25, 18, 20, 30]
 
         for col, (h, w) in enumerate(zip(headers, col_widths), 1):
             cell = ws.cell(row=1, column=col, value=h)
@@ -164,7 +148,6 @@ class KhachHang(models.Model):
                 rec.email or "",
                 trang_thai_map.get(rec.trang_thai, ""),
                 rec.nguoi_phu_trach_id.ho_ten_day_du if rec.nguoi_phu_trach_id else "",
-                rec.so_cong_viec,
                 rec.ghi_chu or "",
             ]
             fill_color = color_map.get(rec.trang_thai, "FFFFFF")
@@ -241,47 +224,4 @@ class KhachHang(models.Model):
                 counter += 1
                 ma_khach_hang = f"{ma_co_ban}{counter:02d}"
             vals['ma_khach_hang'] = ma_khach_hang
-        records = super(KhachHang, self).create(vals)
-        records._add_birthday_campaign_if_today()
-        return records
-
-    def write(self, vals):
-        res = super(KhachHang, self).write(vals)
-        self._add_birthday_campaign_if_today()
-        return res
-
-    def _add_birthday_campaign_if_today(self, today=None):
-        today = today or fields.Date.context_today(self)
-        if not today:
-            return
-        birthday_customers = self.filtered(
-            lambda c: c.ngay_sinh and (c.ngay_sinh.month, c.ngay_sinh.day) == (today.month, today.day)
-        )
-        if not birthday_customers:
-            return
-        Campaign = self.env['chien_dich'].sudo()
-        for customer in birthday_customers:
-            campaign_name = f"Mừng sinh nhật {customer.ten_khach_hang}"
-            campaign = Campaign.search([('ten_chien_dich', '=', campaign_name)], limit=1)
-            if not campaign:
-                Campaign.create({
-                    'ten_chien_dich': campaign_name,
-                    'loai_chien_dich': 'khac',
-                    'ngay_bat_dau': today,
-                    'trang_thai': 'dang_chay',
-                    'muc_tieu': f'Chăm sóc sinh nhật cho {customer.ten_khach_hang}.',
-                    'khach_hang_ids': [(6, 0, [customer.id])],
-                })
-            else:
-                campaign.write({
-                    'ten_chien_dich': campaign_name,
-                    'khach_hang_ids': [(4, customer.id)],
-                })
-
-    @api.model
-    def _cron_add_birthdays_to_campaign(self):
-        today = fields.Date.context_today(self)
-        if not today:
-            return
-        birthday_customers = self.search([('ngay_sinh', '!=', False)])
-        birthday_customers._add_birthday_campaign_if_today(today=today)
+        return super(KhachHang, self).create(vals)
