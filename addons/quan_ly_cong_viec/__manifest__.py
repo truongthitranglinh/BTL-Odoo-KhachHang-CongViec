@@ -25,7 +25,6 @@
         'views/khach_hang_extend.xml',
         'views/nhan_vien_extend.xml',
         'views/menu.xml',
-        'views/dashboard_views.xml',
     ],
 
     'demo': [],
