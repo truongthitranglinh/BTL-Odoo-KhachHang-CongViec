@@ -59,3 +59,4 @@ __pycache__/
 *.zip
 __pycache__/
 *.pyc
+*:Zone.Identifier
