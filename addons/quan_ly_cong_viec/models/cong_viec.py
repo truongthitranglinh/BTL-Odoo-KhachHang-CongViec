@@ -64,12 +64,6 @@ class CongViec(models.Model):
     sync_to_google_calendar = fields.Boolean("Đồng bộ với Google Calendar", default=True)
     last_sync_date = fields.Datetime("Lần đồng bộ cuối", readonly=True)
     
-    @api.onchange('phong_ban_phu_trach_id')
-    def _onchange_phong_ban_phu_trach(self):
-        if self.phong_ban_phu_trach_id:
-            employee = self._find_free_employee(self.phong_ban_phu_trach_id)
-            if employee:
-                self.nguoi_thuc_hien_id = employee
     
     @api.model
     def create(self, vals):
@@ -93,11 +87,6 @@ class CongViec(models.Model):
         
         vals['ma_cong_viec'] = ma_cong_viec
 
-        dept_id = vals.get('phong_ban_phu_trach_id')
-        if dept_id and not vals.get('nguoi_thuc_hien_id'):
-            employee = self._find_free_employee(self.env['phong_ban'].browse(dept_id))
-            if employee:
-                vals['nguoi_thuc_hien_id'] = employee.id
         
         record = super(CongViec, self).create(vals)
         
@@ -107,12 +96,6 @@ class CongViec(models.Model):
         return record
 
     def write(self, vals):
-        if 'phong_ban_phu_trach_id' in vals and not vals.get('nguoi_thuc_hien_id'):
-            dept_id = vals.get('phong_ban_phu_trach_id') or self.phong_ban_phu_trach_id.id
-            if dept_id:
-                employee = self._find_free_employee(self.env['phong_ban'].browse(dept_id))
-                if employee:
-                    vals['nguoi_thuc_hien_id'] = employee.id
         
         result = super().write(vals)
         
@@ -141,22 +124,6 @@ class CongViec(models.Model):
         
         return result
 
-    def _find_free_employee(self, department):
-        if not department:
-            return False
-        employees = self.env['nhan_vien'].search([('phong_ban_id', '=', department.id)])
-        for emp in employees:
-            active_tasks = self.env['cong_viec'].search_count([
-                ('nguoi_thuc_hien_id', '=', emp.id),
-                ('trang_thai', 'in', ['moi', 'dang_thuc_hien'])
-            ])
-            active_projects = self.env['du_an'].search_count([
-                ('nguoi_phu_trach_id', '=', emp.id),
-                ('trang_thai', 'in', ['ke_hoach', 'dang_tien_hanh', 'tam_dung'])
-            ])
-            if active_tasks == 0 and active_projects == 0:
-                return emp
-        return employees[:1] if employees else False
     
     def action_bat_dau(self):
         self.write({'trang_thai': 'dang_thuc_hien'})
