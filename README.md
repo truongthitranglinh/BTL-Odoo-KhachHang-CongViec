@@ -130,3 +130,6 @@ Truy cap: http://localhost:8069
 - Odoo 15 Documentation: https://www.odoo.com/documentation/15.0/
 - Groq API: https://console.groq.com/
 - External API Odoo: https://www.odoo.com/documentation/15.0/developer/reference/external_api.html
+
+## Business Flow Diagram
+Sơ đồ luồng nghiệp vụ end-to-end (Swimlane) cho đề tài Quản lý khách hàng + Quản lý công việc + HRM (Nhóm 1). Mô tả quy trình từ lúc HR tạo hồ sơ nhân viên, nhân viên kinh doanh tạo khách hàng, đặt lịch hẹn/báo giá (tự động hóa Mức 2, dùng dữ liệu HRM), đến khi tích hợp AI Chatbot và đồng bộ Google Calendar (Mức 3). Xem chi tiết: `docs/business-flow/N1_BusinessFlow_QuanLyKhachHang_CongViec.png`.
