@@ -113,6 +113,35 @@ export GROQ_API_KEY="your-key-here"
 python3 odoo-bin -c odoo.conf --dev=all
 ```
 
+
+### Buoc 7: Cau hinh Google Calendar (Muc 3)
+
+He thong dong bo cong viec 2 chieu voi Google Calendar, su dung module `google_calendar` co san cua Odoo.
+
+1. **Tao Google Cloud Project va OAuth Client ID**
+   - Truy cap https://console.cloud.google.com/
+   - Tao project moi (hoac dung project co san), enable **Google Calendar API**
+   - Vao "APIs & Services" > "Credentials" > "Create Credentials" > "OAuth client ID"
+   - Chon loai **Web application**
+   - Them **Authorized redirect URI**:
+http://localhost:8069/google_account/authentication
+- Tao xong se nhan duoc **Client ID** va **Client Secret**
+
+2. **Cau hinh trong Odoo**
+   - Vao **Settings > General Settings**
+   - Tim muc **Google Calendar**, nhap Client ID va Client Secret vua tao
+   - Bam **Save**
+
+3. **Ket noi tai khoan Google cho user**
+   - Vao app **Calendar**
+   - Bam nut **"Google"** (goc phai, duoi lich mini)
+   - Dang nhap Google, cap quyen truy cap Calendar
+   - Neu gap canh bao "app chua xac minh": vao **Google Cloud Console > OAuth consent screen > Test users**, them dung Gmail se dung de test/demo
+
+4. **Kiem tra**
+   - Tao 1 cong viec moi co ngay bat dau, dam bao checkbox "Dong bo voi Google Calendar" duoc bat
+   - Kiem tra event xuat hien tren Google Calendar that (calendar.google.com) hoac trong app Calendar cua Odoo
+
 Truy cap: http://localhost:8069
 
 ## Thanh vien nhom
