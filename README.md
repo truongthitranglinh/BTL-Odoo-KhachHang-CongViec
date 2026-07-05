@@ -146,12 +146,12 @@ Truy cap: http://localhost:8069
 
 ## Thanh vien nhom
 
-| Ho ten | MSSV |
-|---|---|
-| Truong Thi Trang Linh | 1771020425 |
-| Do Thi Phuong Thao | 1771020642 |
-| Hoang Minh Quan | 1771020563 |
-| Dinh Anh Truc | 1771020686 |
+| Ho ten | MSSV | Module phu trach chinh | Chuc nang phu tieu bieu da lam |
+|---|---|---|---|
+| Truong Thi Trang Linh | 1771020425 | Quan ly Khach hang, tich hop Google Calendar, quan ly Git/repo | Xuat bao cao Excel danh sach khach hang (dinh dang mau theo trang thai) |
+| Do Thi Phuong Thao | 1771020642 | Quan ly Cong viec, dong bo Google Calendar | Doi mau su kien theo muc uu tien cong viec khi dong bo len Google Calendar (Khan cap: do, Cao: xanh duong dam, Trung binh: vang, Thap: xanh la) |
+| Hoang Minh Quan | 1771020563 | Quan ly Nhan su (HRM), Chatbot AI | Tu dong sinh ma dinh danh nhan vien & ma phong ban, tu dem so nhan vien theo phong ban |
+| Dinh Anh Truc | 1771020686 | Testing, du lieu mau, Business Flow Diagram | Quy trinh xu ly khieu nai khach hang (Bat dau xu ly -> Phan hoi -> Hoan thanh/Tu choi) |
 
 ## Nguon tham khao
 
