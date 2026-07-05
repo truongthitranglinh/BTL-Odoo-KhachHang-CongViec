@@ -261,9 +261,16 @@ class CongViec(models.Model):
         for record in self:
             if record.google_calendar_event_id:
                 try:
-                    calendar_event = self.env['calendar.event'].sudo().search([
-                        ('google_id', '=', record.google_calendar_event_id)
-                    ], limit=1)
+                    calendar_event = None
+                    if record.google_calendar_event_id.startswith('odoo_'):
+                        event_id = int(record.google_calendar_event_id.replace('odoo_', ''))
+                        calendar_event = self.env['calendar.event'].sudo().browse(event_id)
+                        if not calendar_event.exists():
+                            calendar_event = None
+                    else:
+                        calendar_event = self.env['calendar.event'].sudo().search([
+                            ('google_id', '=', record.google_calendar_event_id)
+                        ], limit=1)
                     if calendar_event:
                         calendar_event.sudo().unlink()
                 except Exception as e:
