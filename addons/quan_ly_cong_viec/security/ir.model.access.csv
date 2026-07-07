@@ -1,5 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_cong_viec,cong_viec.cong_viec,model_cong_viec,base.group_user,1,1,1,1
-access_du_an,cong_viec.du_an,model_du_an,base.group_user,1,1,1,1
-access_tai_nguyen_du_an,cong_viec.tai_nguyen_du_an,model_tai_nguyen_du_an,base.group_user,1,1,1,1
 access_xu_ly_khieu_nai,cong_viec.xu_ly_khieu_nai,model_xu_ly_khieu_nai,base.group_user,1,1,1,1

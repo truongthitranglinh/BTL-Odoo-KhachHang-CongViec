@@ -21,12 +21,9 @@
     'data': [
         'security/ir.model.access.csv',
         'views/khach_hang.xml',
-        'views/hop_dong.xml',
         'views/phan_hoi.xml',
         'views/khach_hang_phan_hoi.xml',
-        'views/chien_dich.xml',
         'views/nhan_vien_extend.xml',
-        'data/cron.xml',
         'views/menu.xml',
     ],
 

@@ -25,7 +25,6 @@ class CongViec(models.Model):
     ], string="Loại công việc", required=True, default='goi_dien')
     
     khach_hang_id = fields.Many2one('khach_hang', string="Khách hàng", required=True)
-    du_an_id = fields.Many2one('du_an', string="Dự án")
     
     ngay_bat_dau = fields.Datetime("Ngày bắt đầu", default=fields.Datetime.now)
     ngay_hoan_thanh = fields.Datetime("Ngày hoàn thành")
@@ -46,7 +45,7 @@ class CongViec(models.Model):
     ], string="Mức độ ưu tiên", default='trung_binh')
     
     phong_ban_phu_trach_id = fields.Many2one('phong_ban', string="Phòng ban phụ trách", required=True)
-    nguoi_thuc_hien_id = fields.Many2one('nhan_vien', string="Nhân viên được gán", readonly=True)
+    nguoi_thuc_hien_id = fields.Many2one('nhan_vien', string="Nhân viên được gán")
     
     mo_ta = fields.Text("Mô tả")
     ket_qua = fields.Text("Kết quả")
@@ -65,12 +64,6 @@ class CongViec(models.Model):
     sync_to_google_calendar = fields.Boolean("Đồng bộ với Google Calendar", default=True)
     last_sync_date = fields.Datetime("Lần đồng bộ cuối", readonly=True)
     
-    @api.onchange('phong_ban_phu_trach_id')
-    def _onchange_phong_ban_phu_trach(self):
-        if self.phong_ban_phu_trach_id:
-            employee = self._find_free_employee(self.phong_ban_phu_trach_id)
-            if employee:
-                self.nguoi_thuc_hien_id = employee
     
     @api.model
     def create(self, vals):
@@ -94,11 +87,6 @@ class CongViec(models.Model):
         
         vals['ma_cong_viec'] = ma_cong_viec
 
-        dept_id = vals.get('phong_ban_phu_trach_id')
-        if dept_id and not vals.get('nguoi_thuc_hien_id'):
-            employee = self._find_free_employee(self.env['phong_ban'].browse(dept_id))
-            if employee:
-                vals['nguoi_thuc_hien_id'] = employee.id
         
         record = super(CongViec, self).create(vals)
         
@@ -108,12 +96,6 @@ class CongViec(models.Model):
         return record
 
     def write(self, vals):
-        if 'phong_ban_phu_trach_id' in vals and not vals.get('nguoi_thuc_hien_id'):
-            dept_id = vals.get('phong_ban_phu_trach_id') or self.phong_ban_phu_trach_id.id
-            if dept_id:
-                employee = self._find_free_employee(self.env['phong_ban'].browse(dept_id))
-                if employee:
-                    vals['nguoi_thuc_hien_id'] = employee.id
         
         result = super().write(vals)
         
@@ -142,22 +124,6 @@ class CongViec(models.Model):
         
         return result
 
-    def _find_free_employee(self, department):
-        if not department:
-            return False
-        employees = self.env['nhan_vien'].search([('phong_ban_id', '=', department.id)])
-        for emp in employees:
-            active_tasks = self.env['cong_viec'].search_count([
-                ('nguoi_thuc_hien_id', '=', emp.id),
-                ('trang_thai', 'in', ['moi', 'dang_thuc_hien'])
-            ])
-            active_projects = self.env['du_an'].search_count([
-                ('nguoi_phu_trach_id', '=', emp.id),
-                ('trang_thai', 'in', ['ke_hoach', 'dang_tien_hanh', 'tam_dung'])
-            ])
-            if active_tasks == 0 and active_projects == 0:
-                return emp
-        return employees[:1] if employees else False
     
     def action_bat_dau(self):
         self.write({'trang_thai': 'dang_thuc_hien'})
@@ -295,9 +261,16 @@ class CongViec(models.Model):
         for record in self:
             if record.google_calendar_event_id:
                 try:
-                    calendar_event = self.env['calendar.event'].sudo().search([
-                        ('google_id', '=', record.google_calendar_event_id)
-                    ], limit=1)
+                    calendar_event = None
+                    if record.google_calendar_event_id.startswith('odoo_'):
+                        event_id = int(record.google_calendar_event_id.replace('odoo_', ''))
+                        calendar_event = self.env['calendar.event'].sudo().browse(event_id)
+                        if not calendar_event.exists():
+                            calendar_event = None
+                    else:
+                        calendar_event = self.env['calendar.event'].sudo().search([
+                            ('google_id', '=', record.google_calendar_event_id)
+                        ], limit=1)
                     if calendar_event:
                         calendar_event.sudo().unlink()
                 except Exception as e:
