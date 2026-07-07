@@ -1,4 +1,16 @@
-# BTL Odoo - Quan ly Khach hang & Cong viec tich hop HRM
+# Faculty of Information Technology (DaiNam University)
+
+## He thong quan ly Khach hang, Cong viec tich hop Nhan su tren nen tang Odoo 15
+
+<div align="center">
+  <img src="images/aiotlab_logo.png" alt="AIoTLab Logo" width="180"/>
+  <img src="images/fitdnu_logo.png" alt="FIT DNU Logo" width="180"/>
+  <img src="images/dnu_logo.png" alt="DaiNam University Logo" width="180"/>
+
+  [![AIoTLab](https://img.shields.io/badge/AIoTLab-green?style=for-the-badge)](https://fit.dainam.edu.vn)
+  [![Faculty of IT](https://img.shields.io/badge/Faculty%20of%20Information%20Technology-blue?style=for-the-badge)](https://fit.dainam.edu.vn)
+  [![DaiNam University](https://img.shields.io/badge/DaiNam%20University-orange?style=for-the-badge)](https://dainam.edu.vn)
+</div>
 
 [![FIT-DNU](https://img.shields.io/badge/FIT-DNU-blue)](https://dainam.edu.vn/vi/khoa-cong-nghe-thong-tin)
 [![Odoo](https://img.shields.io/badge/ERP-Odoo%2015-purple)](https://www.odoo.com/)
